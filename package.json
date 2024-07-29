@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "server": "FLASK_DEBUG=1 pip3 install -r requirements.txt && python3 -m flask --app api/app run -p 5328",
+    "pip_install": "FLASK_DEBUG=1 pip3 install -r requirements.txt",
+    "server": "FLASK_DEBUG=1 python3 -m flask --app api/app run -p 5328",
     "client": "next dev",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
     "build": "next build",
@@ -13,7 +14,8 @@
   "dependencies": {
     "next": "14.2.5",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/node": "^20",
