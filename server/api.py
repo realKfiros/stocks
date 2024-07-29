@@ -1,7 +1,10 @@
 import requests
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 import os
+import joblib
+from trainer import train_model
+import pandas as pd
 
 load_dotenv(".env.local")
 
@@ -24,6 +27,17 @@ def get_stock_data(symbol):
             'price': 'Data not available'
         }
     return jsonify(stock_data)
+
+@app.route('/api/predict/<symbol>', methods=['POST'])
+def predict(symbol):
+    print(symbol)
+    if not os.path.isfile(f'models/{symbol}_model.pkl'):
+        train_model(symbol)
+    model = joblib.load(f'models/{symbol}_model.pkl')
+    data = request.get_json()
+    df = pd.DataFrame([data])
+    prediction = model.predict(df)
+    return jsonify({'prediction': prediction[0]})
 
 if __name__ == '__main__':
     app.run(debug=True)
